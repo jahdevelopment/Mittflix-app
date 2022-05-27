@@ -1,37 +1,45 @@
-const Movie = () => {
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+const Movie = ({ title, rating, plot, image, id }) => {
+  const [value, setValue] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem(id)) setValue(true);
+  }, [id]);
+
+  const handleClick = (e) => {
+    setValue(!value);
+    if (!value) {
+      localStorage.setItem(id, true);
+      window.dispatchEvent(new Event("storage"));
+    } else {
+      localStorage.removeItem(id);
+      window.dispatchEvent(new Event("storage"));
+    }
+  };
+
   return (
-    <div className="movie">
-      <a href="/details/60735">
-        <img
-          src="https://image.tmdb.org/t/p/w500/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg"
-          alt="Movie poster"
-        />
-        <div className="overlay">
-          <div className="title">The Flash</div>
-          <div className="rating">7.7/10</div>
-          <div className="plot">
-            After a particle accelerator causes a freak storm, CSI Investigator
-            Barry Allen is struck by lightning and falls into a coma. Months
-            later he awakens with the power of super speed, granting him the
-            ability to move through Central City like an unseen guardian angel.
-            Though initially excited by his newfound powers, Barry is shocked to
-            discover he is not the only "meta-human" who was created in the wake
-            of the accelerator explosion -- and not everyone is using their new
-            powers for good. Barry partners with S.T.A.R. Labs and dedicates his
-            life to protect the innocent. For now, only a few close friends and
-            associates know that Barry is literally the fastest man alive, but
-            it won't be long before the world learns what Barry Allen has
-            become...The Flash.
+    <>
+      <div className="movie">
+        <Link to={`/details/${id}`}>
+          <img 
+          src={`https://image.tmdb.org/t/p/w500${image}`} 
+          alt={title} />
+          <div className="overlay">
+            <div className="title">{title}</div>
+            <div className="rating">{rating}/10</div>
+            <div className="plot">{plot}</div>
+          </div>
+        </Link>
+        <div data-toggled={value} className="listToggle" onClick={handleClick}>
+          <div>
+            <i className="fa fa-fw fa-plus"></i>
+            <i className="fa fa-fw fa-check"></i>
           </div>
         </div>
-      </a>
-      <div data-toggled="false" className="listToggle">
-        <div>
-          <i className="fa fa-fw fa-plus"></i>
-          <i className="fa fa-fw fa-check"></i>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

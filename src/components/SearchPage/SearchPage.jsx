@@ -1,38 +1,27 @@
-import Header from "../Header/Header";
-import Movie from "../Movie/Movie";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import Layout from "../Layout/Layout";
+import Platform from "../Platform/Platform";
 
 const SearchPage = () => {
+
+  const [movies, setMovies] = useState([]);
+  const { search } =useLocation();
+  
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/search/tv?api_key=32fba61adda7634622096950aa45f404&language=en-CA&page=1&query=${
+        search.split("=")[1]
+      }&include_adult=false`
+    )
+    .then((response) => response.json())
+    .then((data) => setMovies(data.results));
+  });
+
   return ( 
-    <div id="root">
-      <Header />
-      <div className="titleList">
-        <div className="title">
-          <h1>Results</h1>
-          <div className="titles-wrapper">
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-            <Movie />           
-          </div>
-        </div>
-      </div>
-    </div>
+    <Layout>
+      <Platform title="Results" movies={movies} />
+    </Layout>
    );
 }
  
