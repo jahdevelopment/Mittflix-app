@@ -10,9 +10,7 @@ const SearchPage = () => {
   
   useEffect(() => {
     fetch(
-      `https://api.themoviedb.org/3/search/tv?api_key=32fba61adda7634622096950aa45f404&language=en-CA&page=1&query=${
-        search.split("=")[1]
-      }&include_adult=false`
+      `https://api.themoviedb.org/3/search/tv?api_key=32fba61adda7634622096950aa45f404&language=en-CA&page=1&query=${search.split("=")[1]}`
     )
     .then((response) => response.json())
     .then((data) => setMovies(data.results));
